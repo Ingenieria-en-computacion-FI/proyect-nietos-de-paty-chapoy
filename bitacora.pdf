@@ -1,0 +1,1706 @@
+
+Creación de un videojuego en C con SDL2
+
+
+
+Integrantes:
+
+Estévez Ayala Dana Paola
+Santamaria Alvarez Aranza
+Vázquez Hernández Natali
+Vidales Jiménez Brenda Dánae
+
+
+
+Profesora: Ing. Adara Mercado Martínez
+Semestre: 2026-2
+
+Introducción
+El presente proyecto consiste en el desarrollo de un videojuego tipo Pac-Man simplificado, utilizando el lenguaje de programación C y la biblioteca gráfica SDL2. El objetivo principal fue aplicar los conocimientos adquiridos en la asignatura Fundamentos de Programación, integrando conceptos clave como programación estructurada, modularización, uso de funciones, arreglos bidimensionales y manejo de archivos.
+La mecánica del juego se basa en controlar un personaje que debe recolectar elementos (pellets) dentro de un laberinto mientras evita colisiones con fantasmas; la partida concluye cuando el jugador pierde todas sus vidas o cuando limpia por completo el mapa.
+Objetivos del proyecto
+Objetivo General: Desarrollar un videojuego funcional inspirado en Pac-Man que permita al jugador recorrer un laberinto, recolectar pellets, evitar fantasmas y acumular puntos.
+
+Objetivos Específicos:
+Implementar un sistema de mapas basado en arreglos bidimensionales.
+Utilizar SDL2 para la representación gráfica.
+Implementar movimiento y detección de colisiones.
+Utilizar archivos para cargar niveles y guardar puntajes.
+Aplicar programación estructurada mediante funciones y módulos.
+Distribución de tareas:
+El desarrollo del proyecto fue un esfuerzo conjunto en el que todas participamos activamente tanto en la programación como en la documentación. Para mantener el equilibrio y la eficiencia, la distribución de responsabilidades se organizó de la siguiente manera:
+Estévez Ayala Dana Paola: Participó en el desarrollo del código, diseñó la lógica del programa (pseudocódigo y diagramas de flujo).
+Santamaría Álvarez Aranza: Formó parte del equipo de programación e investigación, y lideró el diseño de la presentación para la exposición.
+Velázquez Hernández Natali: Estuvo al frente de la redacción general de la documentación del proyecto y colaboró activamente en el desarrollo del código.
+Vidales Jiménez Brenda Dánae: Coordinó la integración de la programación, encargándose de compilar el código final y de gestionar el envío de las evidencias.
+Análisis:
+Entradas:
+
+Matriz mapa
+Número de filas
+Número de columnas
+Coordenada X
+Coordenada Y
+Matriz mapa
+Tamaño de cada celda
+Nivel
+Tamaño de cada casilla
+Posición y dirección de los fantasmas.
+Posición y dirección de Pac-Man
+Letra a dibujar
+Dirección solicitada.
+Velocidad de movimiento.
+Tamaño de cada celda.
+Estado de colisión con muros
+Tamaño de cada celda.
+Estado de intersección.
+Estado de colisión con muros.
+Número de vidas.
+Puntuación.
+Cantidad de pellets restantes
+Estado del juego.
+
+Salidas:
+
+Matriz inicializada.
+Mapa mostrado en pantalla
+Actualización del estado del juego y la puntuación.
+Actualización de la cantidad de pellets restantes.
+Visualización de elementos del HUD
+Mensaje de finalización del juego.
+Puntuación final.
+Nueva dirección y posición del fantasma.
+Mensaje con la posición actualizada.
+Nueva posición de Pac-Man.
+Cambio de dirección cuando sea posible.
+Teletransporte en los túneles laterales del mapa.
+Mensaje con la posición actualizada.
+Representación de una letra grande en la posición indicada.
+Mensaje de qué letra se está dibujando.
+Mensaje de error si la letra no pertenece al conjunto.
+
+Restricciones: 
+El mapa debe tener 22 filas y 28 columnas.
+Los bordes siempre deben contener el valor 1.
+Las posiciones (2,2), (2,27), (21,2) y (21,27) siempre deben contener el valor 3.
+La región comprendida entre las filas 10 a 14 y columnas 11 a 18 debe contener el valor 2.
+Mapeo de la zona de juego: Las casillas complementarias del escenario se configuran automáticamente como pasillos transitables con consumibles (valor 0) o estructuras de colisión internas (valor 1), asegurando la conectividad del mapa. 
+Máximo 6 fantasmas activos
+Solo se consideran pellets las casillas con valores 0, 3 o 4. 
+Pac-Man siempre inicia en la posición predeterminada.
+Los fantasmas se posicionan en una fila fija y con separación entre ellos.
+Solo se admiten las letras: P, A, C, G, I, R, L, S, E, M, O y V. 
+Se aceptan letras mayúsculas y minúsculas.
+La posición de dibujo depende de las coordenadas ingresadas.
+Desarrollo del proyecto:
+El desarrollo del proyecto se llevó a cabo de manera incremental, Comenzamos con una versión básica que permitía el movimiento del personaje sobre una matriz, generación de comida y un sistema de puntuación.
+
+Decisiones de diseño
+Durante el proyecto se tomaron diversas decisiones para mejorar la experiencia de juego:
+Tablero y fantasmas
+Utilizar laberintos con distribución dinámica para incrementar la dificultad.
+Implementar varios fantasmas con colores distintos para facilitar su identificación.
+Incrementar progresivamente el número de fantasmas conforme aumenta el nivel.
+Incorporar movimiento autónomo para los enemigos.
+Implementar un sistema de vidas en lugar de finalizar la partida al primer error.
+Aspecto visual
+Mantener la apariencia clásica de Pac-Man utilizando colores característicos.
+Emplear sprites para representar personajes y elementos del escenario.
+Utilizar SDL2 para mejorar la calidad visual respecto a las primeras versiones en consola.
+Incorporar animaciones para hacer más natural el movimiento del jugador y los fantasmas.
+Mecánicas de juego
+Introducir objetos especiales como gemas, frutas y llaves.
+Incorporar un sistema de niveles.
+Implementar poderes temporales que modifican el comportamiento de los fantasmas.
+Agregar pausas y opciones para finalizar la partida voluntariamente.
+
+Problemas encontrados durante el desarrollo.
+Durante este proceso surgieron diversos problemas técnicos:
+El movimiento inicial requería presionar Enter después de cada acción, lo que hacía que el juego fuera poco fluido.
+Los fantasmas no se movían correctamente y en ocasiones permanecían inmóviles.
+Después de perder una vida, el juego podía bloquearse o dejar de responder.
+Algunos fantasmas atravesaban los límites del tablero.
+Los enemigos presentaban errores al desplazarse por determinadas zonas del mapa.
+La generación aleatoria de laberintos podía producir configuraciones poco jugables.
+Existieron dificultades para adaptar el proyecto a SDL2 y cargar correctamente las imágenes.
+Fue necesario ajustar tamaños y proporciones de sprites para que coincidieran con el tablero.
+Se presentaron problemas de compatibilidad entre distintos sistemas operativos.
+Conforme aumentó el tamaño del código, la localización de errores se volvió más compleja.
+Entre los problemas más importantes estuvieron lograr que los fantasmas se movieran sin depender del movimiento del jugador, conseguir un desplazamiento más fluido de Pac-Man y adaptar adecuadamente el proyecto a SDL2.
+Estos problemas fueron encontrados gracias a las pruebas realizadas.
+Pruebas realizadas
+Durante el desarrollo del videojuego se llevaron a cabo diversas pruebas con el objetivo de verificar el correcto funcionamiento de las mecánicas implementadas y detectar posibles errores en el código. A continuación se describe las pruebas que más resaltaron:
+Prueba realizada con el código número 5.
+En una de las primeras pruebas realizadas se detectó que los fantasmas podían atravesar los límites del tablero y desplazarse fuera de las zonas permitidas. Para corregir este problema se revisaron y ajustaron las validaciones de movimiento, garantizando que los enemigos permanecieran dentro de los límites establecidos.
+Prueba realizada con el código número 9.
+Posteriormente se realizaron nuevas pruebas en las que se observó que algunos fantasmas aún presentaban comportamientos incorrectos durante su desplazamiento. Ante esta situación, se revisó la lógica de movimiento y el sistema de colisiones, realizando ajustes en las funciones correspondientes para corregir los errores detectados y mejorar la estabilidad del juego.
+Prueba realizada con el código final.
+Finalmente se efectuó una prueba general del videojuego para verificar la integración de todas las funcionalidades desarrolladas. Los resultados obtenidos fueron satisfactorios, ya que el movimiento de los personajes se realizó correctamente, las colisiones funcionaron de manera adecuada y la progresión entre niveles se ejecutó sin errores significativos. Con ello se confirmó que el comportamiento general del videojuego cumplía con los objetivos planteados para el proyecto.
+Nota: Las prubas de todos los códigos esta en esta carpeta: https://drive.google.com/drive/folders/1KdJRv6dT_XHjCpzB9YEl7eSvtEFXB9J8?usp=sharing
+
+Uso de herramientas de Inteligencia Artificial
+Herramienta utilizada
+ChatGPT
+Gemini
+Consulta realizada a ChatGPT
+"Quiero que los fantasmas sean de colores, que el tablero sea blanco y el Pac-Man amarillo, también quiero que los fantasmas se muevan y que el tablero cambie aleatoriamente, que pueda poner pausa o terminar el juego si quiero, y si toco los muros que sea game over".
+Cómo se utilizó la respuesta
+Las respuestas obtenidas se utilizaron para proponer mejoras visuales, implementar colores, optimizar el movimiento de los fantasmas y mejorar la compatibilidad del programa entre distintos sistemas operativos. También sirvieron para resolver problemas relacionados con la ejecución y comportamiento del juego.
+Consulta realizada a Gemini
+"Quiero que los fantasmas se muevan y que el tablero cambie aleatoriamente, que pueda poner pausa o termine el juego si quiero, y si toco los muros que sea game over".
+Cómo se utilizó la respuesta
+Las sugerencias permitieron identificar errores de implementación, corregir funciones que no estaban operando correctamente y reorganizar partes del código que se habían vuelto difíciles de administrar debido a su crecimiento.
+Consulta adicional
+"Súmale que tiene 3 vidas, que se perderán cuando te toquen los fantasmas, que aparezcan más enemigos conforme avance el nivel y que el máximo sea de 6 fantasmas".
+Cómo se utilizó la respuesta
+Las recomendaciones ayudaron a definir el sistema de vidas, las condiciones de derrota, los mensajes mostrados al usuario y el escalamiento progresivo de la dificultad del juego.
+
+En las siguientes secciones se describe cada versión desarrollada, destacando las funcionalidades implementadas y los principales cambios realizados respecto a las versiones anteriores.
+
+Primer codigo
+Para esta primer aversión se decidió dividir el código en cuatro funciones, o secciones, principales:
+
+void setup()
+Usada como la función de inicialización, se ejecuta solo una vez al arrancar el programa. Usa srand(time(NULL)) para que la generación de números aleatorios varíe en cada partida. Coloca a el personaje en la esquina superior izquierda (0,0) y reinicia el marcador a cero. También utiliza un bucle do-while para asegurarse de que la primera comida aparezca en una coordenada aleatoria válida, es decir, que no sea en un muro o encima del personaje.
+
+void draw()
+Función encargada de la sección visual del juego, limpia y redibuja el entorno en cada turno empleando ciclos for.Imprime los bordes exteriores del mapa usando el carácter #. Evalúa casilla por casilla el mapa del juego priorizando qué imprimir mediante el uso de if-else y muestra en la parte inferior el puntaje actual y las instrucciones de control.
+
+void  inputFunc()
+Encargada de la lógica del juego y las interacciones con el usuario. Lee las teclas usando scanf, calcula las coordenadas teóricas a las que se movería el jugador según las teclas w, a , s , d con ayuda de un bloque switch, además de verificar con ayuda de condicionales que el movimiento propuesto esté dentro de los límites de la matriz y que la casilla de destino no sea un muro y detectar las colisiones.
+
+Int main()
+Punto de entrada y el “cerebro” organizador de nuestro juego, llama a setup() para preparar el escenario, inicia el ciclo while(true) y llama consecutivamente a las funciones draw() e inputFunc().
+
+
+
+Segundo codigo
+Para la segunda versión se hicieron cambios con respecto a la estética, el control del estado del juego y se añadieron a los enemigos del juego además de una mejora en las condiciones de derrota.
+Códigos ANSI
+Se añadieron secuencias de escape ANSI para añadir color al entorno, presentando al personaje en amarillo, los enemigos en rojo y cian, pellets en amarillo y los muros en blanco.
+
+Generación del entorno
+Se sustituyó el mapa fijo por la función generarLaberinto(), la cual diseña un entorno aleatorio al inicio de cada partida. Además, el mapa muta por completo cada vez que el jugador recolecta un pellet, incrementando la dificultad del juego.
+
+Fantasma
+Se introdujeron dos entidades enemigas (fantasmas) gestionadas por la nueva función moverFantasmas(). Estos personajes se desplazan de forma autónoma y aleatoria por los pasillos transitables en cada turno del jugador.
+
+Loop del juego y flujo 
+Se implementó la variable booleana gameOver para controlar el estado de la partida. Esto permitió añadir opciones para pausar el juego (tecla P), salir voluntariamente (tecla X) y desplegar una pantalla final con la puntuación obtenida en caso de derrota.
+
+Condiciones de derrota
+Se establecieron tres condiciones estrictas de fin de juego (Game Over). El usuario pierde la partida de forma inmediata si realiza cualquiera de las siguientes acciones:
+Intentar salir de los límites permitidos de la matriz.
+Chocar directamente contra un muro interno del laberinto.
+Ser alcanzado por cualquiera de los dos fantasmas
+
+ 
+
+Tercer codigo
+La tercera versión sofisticó el juego mediante programación avanzada para lograr un producto final pulido:
+
+Movimiento Fluido 
+Se incorporaron <unistd.h> y <termios.h> en inputFunc() mediante la función capturarTecla(). Esto permite leer los comandos W/A/S/D al instante sin que el usuario tenga que presionar Enter.
+
+Estructuras Complejas
+ Se creó el tipo de dato struct Fantasma y un arreglo de estructuras para gestionar múltiples enemigos de forma limpia y escalable.
+
+Sistema de Vidas
+ Se implementó la variable lives (3 vidas) y la función resetMuerte(). Al chocar, el jugador ya no pierde la partida de inmediato; se le resta una vida, se muestran corazones (<3) y se reinician las posiciones de forma segura.
+
+Inteligencia Artificial
+Los enemigos abandonaron el movimiento al azar y adoptaron la función moverFantasmasIA(), un algoritmo que calcula la posición de Pac-Man para perseguirlo activamente y rodear muros si se queda trabado.
+
+Dificultad por Niveles
+Se añadieron las variables nivel y numFantasmas. Cada vez que el jugador come, avanza de nivel, el mapa cambia y se añade un fantasma nuevo (desde 2 hasta un tope de 6) para crear un reto incremental.
+
+
+
+Cuarto codigo
+La cuarta versión consolida las mecánicas definitivas del juego clásico incorporando la variable del tiempo real, nuevos elementos interactivos y algoritmos de comportamiento opuestos para los enemigos:
+Mecánica de Supergema
+Se introdujeron las variables modoSuperGema, gemActiva y la función spawnearGema() (con un 40% de probabilidad de aparición). Al recolectar este nuevo elemento (*), Pac-Man adquiere la capacidad temporal de invertir las reglas del juego: los fantasmas se vuelven vulnerables, cambian a color azul (G) en la función draw() y el jugador puede comérselos para obtener un bono de 50 puntos.
+
+Control del Tiempo Real
+A diferencia de las versiones anteriores que solo usaban el tiempo para la semilla aleatoria, ahora se emplea la variable de tipo time_t llamada tiempoFinPoder. Al capturar la gema, el sistema calcula el tiempo actual y le suma 5 segundos; la función draw() se encarga de verificar constantemente si el tiempo expiró y muestra un contador en la pantalla con los segundos restantes del poder.
+
+Dualidad en la Inteligencia Artificial
+La función moverFantasmasIA() fue modificada para reaccionar al estado de la supergema. Si el poder está inactivo, los enemigos ejecutan su algoritmo normal de cacería; si el poder está activo, la lógica se invierte matemáticamente, obligando a los fantasmas a alejarse de las coordenadas de Pac-Man para salvarse.
+
+Estructura con Estados de Vida de Enemigos
+Se añadió el campo booleano vivo dentro de la estructura struct Fantasma. Esto permite que los enemigos comidos queden deshabilitados temporalmente en el mapa (la función moverFantasmasIA() los ignora con un continue) hasta que se reinicie el nivel o el jugador pierda una vida.
+
+Dificultad Escalamiento de Muros
+La función generarLaberinto() se volvió más estricta. La densidad de los muros internos ya no es fija (12%); ahora se calcula con la fórmula 10 + (nivel * 2), provocando que el laberinto sea cada vez más cerrado y difícil de navegar a medida que el usuario avanza de nivel, con un tope máximo de seguridad del 25%.
+
+
+
+Quinto codigo
+
+Juego No Bloqueante 
+Se implementó la librería <fcntl.h> para que el juego corra en tiempo real de forma continua. Ahora, los fantasmas se mueven solos y el tiempo transcurre de forma asíncrona aunque el jugador no presione ninguna tecla.
+
+Llenado de Comida 
+El mapa ya no tiene una sola comida; ahora se llena de puntitos amarillos desde el inicio. Se añadió la variable comidaRestante para obligar al jugador a limpiar el escenario completo antes de avanzar de nivel.
+
+Balance de Juego
+Se aumentó el rango de aparición segura de los fantasmas al iniciar el mapa (de 3 a 4 casillas) y la probabilidad de la gema subió a 60% para compensar la dificultad del tiempo real.
+
+
+
+
+Sexto codigo(SDL)
+
+Migración a Gráficos 2D (SDL2)
+Se eliminaron las librerías de consola y se integró el framework multimedia SDL2. El flujo principal sustituyó la terminal por objetos nativos del sistema operativo: una ventana dedicada (SDL_Window) de 448×576 píxeles y un renderizador gráfico (SDL_Renderer).
+
+Uso de Texturas y Animación por Cuadros
+Las matrices de caracteres se reemplazaron por la carga de una imagen externa (tablerodepacman.png). Utilizando estructuras SDL_Rect, el programa recorta los mapas correspondientes a cada nivel y gestiona arreglos de sprites para Pac-Man, alternando entre ellos mediante SDL_GetTicks() para crear animaciones fluidas según la dirección del movimiento.
+
+Física de Píxeles y Control Continuo
+El personaje ya no salta de casilla en casilla; ahora se desplaza de forma continua en un plano cartesiano sumando o restando píxeles según una velocidad fija. Los controles se leen asíncronamente con SDL_GetKeyboardState, permitiendo el uso simultáneo de las flechas de dirección y las teclas W, A, S, D.
+
+Fluidez y Sincronización
+La actualización visual del juego se enlazó a la tasa de refresco del monitor mediante la bandera SDL_RENDERER_PRESENTVSYNC y un retraso controlado (SDL_Delay(16)). Esto eliminó por completo el parpadeo de la consola y optimizó el uso de la CPU, garantizando un rendimiento constante de 60 cuadros por segundo.
+
+Imagen que usada para el tablero
+
+
+Septimo codigo(SDL)
+La séptima versión evoluciona el motor gráfico al incorporar un sistema multitextura que permite la integración formal, la animación independiente y el escalado de los enemigos en el plano bidimensional:
+
+Estructuración de Datos para Enemigos
+Se creó la estructura typedef struct Ghost para sustituir las variables sueltas de las versiones previas. Esta encapsula los componentes físicos y visuales de cada enemigo (coordenadas, velocidad, dirección, frame actual y estado de vida), organizándolos de manera escalable en el arreglo global fantasmas[MAX_FANTASMAS].
+
+Sistema Multitextura
+A diferencia de la versión anterior que cargaba un único archivo, el programa ahora procesa de forma paralela dos hojas de texturas: texTableros (tableros y Pac-Man) y la nueva texFantasmas (fantasmasdepacman.png).
+
+Renderizado por Desplazamiento Relativo
+Para dibujar los seis colores de fantasmas de forma eficiente, se implementó el arreglo cajasFantasmasSrc[]. En el bucle de dibujo, la posición en pantalla de cada enemigo se calcula sumando las coordenadas de origen de su caja de color con el desplazamiento de la animación de las patitas (framesFantasmaAnim[]), logrando un efecto dinámico de movimiento en tiempo real.
+
+Control de Tiempos Asíncronos Desacoplados
+Se introdujo la variable lastGhostMoveTime para gestionar de forma independiente el reloj de los enemigos mediante SDL_GetTicks(). Mientras que Pac-Man y la pantalla se actualizan de forma continua, la lógica de los fantasmas (pasos, animaciones y cambios de rumbo del 20% de probabilidad al azar) quedó restringida para ejecutarse estrictamente cada 200 ms, equilibrando la jugabilidad.
+
+Rutina Centralizada configurarNivel()
+Se automatizó la transición de las pantallas mediante esta función, la cual inicializa dinámicamente el número de enemigos activos según el nivel actual, calcula un espaciado equidistante en sus coordenadas de inicio para evitar que se encimen y reubica a Pac-Man en el centro de la pantalla de forma segura.
+
+
+
+Octavo codigo(SDL)
+La octava versión implementa un sistema de control espacial riguroso al reintroducir una matriz lógica, pero ahora vinculada a las coordenadas físicas de píxeles en el entorno gráfico de SDL2:
+Control por Matriz Estricta 
+Se definió una rejilla estática de 28×28 casillas, donde el valor 1 representa paredes rígidas. Los personajes ya no se mueven libremente por la pantalla, sino que están confinados a los pasillos lógicos mediante la nueva función predictiva esMuro(), la cual traduce las posiciones en píxeles a coordenadas de la matriz (columna = x / TAM_CASILLA).
+
+Búfer de Giro y Alineación de Rejilla
+Se integraron las variables nextDx y nextNextDy en la estructura del jugador. Este búfer almacena la dirección que el usuario desea tomar (W, A, S, D) y solo efectúa el giro de forma automática cuando Pac-Man está perfectamente alineado al centro de una intersección (x % TAM_CASILLA == 0), replicando con precisión la jugabilidad del arcade clásico.
+
+Inteligencia Artificial de Decisiones en Encrucijadas
+Los fantasmas adoptaron un algoritmo de navegación continuo. En lugar de rebotar en los bordes de la ventana, calculan las rutas disponibles en cada intersección del laberinto mediante arreglos de dirección (dirX, dirY). Eligen un camino válido al azar y tienen prohibido dar la vuelta en U inmediatamente, a menos que queden completamente atrapados.
+
+Cálculo de Colisiones Gráficas Reales
+Se eliminó el sistema posicional arbitrario para dar paso a una detección de impactos matemática por proximidad absoluta. Utilizando la función abs(), el juego evalúa en cada ciclo si la distancia entre el centro de Pac-Man y cualquier fantasma activo es menor a 12 píxeles, gatillando de inmediato el descuento de vidas y la rutina de reinicio.
+
+Rediseño Gráfico Unificado y Rotaciones
+Las dimensiones de la ventana se encogieron matemáticamente a 448×448 píxeles para encajar perfectamente con la escala de la matriz. Además, se simplificó el renderizado del protagonista usando un recorte directo de dos frames en la hoja de texturas (framesPacmanAnim[]), aplicando rotaciones angulares dinámicas (0∘, 90∘, 180∘ o 270∘) mediante SDL_RenderCopyEx según sus vectores de movimiento.
+
+
+
+Utilice el amarillo
+
+Noveno codigo(SDL)
+La novena versión expande el núcleo de juego incorporando dinámicas temporales complejas, estados alternativos para las entidades e interactividad mediante coleccionables aleatorios:
+Sistema de Ítems Dinámicos
+ Se integró una estructura para gestionar coleccionables (frutas y un objeto especial). Estos aparecen de manera aleatoria en pasillos libres del laberinto mediante la rutina de emparejamiento condicional spawnearItem(). Cada elemento cuenta con un temporizador estricto de descarte automático que expira y reubica el objeto si el jugador no lo recoge tras 30 segundos.
+
+Mecánica de Estado Global
+Al recolectar el ítem de tipo 6 (Llave Azul), el juego activa una bandera global de vulnerabilidad (modoLlaveAzul = true) por una ventana asíncrona de 10 segundos basada en SDL_GetTicks(). Este estado altera radicalmente las reglas de interacción y el flujo del juego.
+
+Comportamiento Dual en Colisiones
+La lógica de proximidad matemática se reescribió para responder al estado global de poder. Si el modo especial está inactivo, el contacto con un fantasma mata a Pac-Man. Si está activo, el jugador intercepta al enemigo, suma un bono de 50 puntos y lo fuerza a regenerarse instantáneamente en las coordenadas de la base central.
+
+Modificación de Sprites Dinámicos en Renderizado 
+La hoja de gráficos mutó de texFantasmas a un archivo unificado de recursos (texSprites). El bucle de dibujo ahora evalúa si el estado de la Llave Azul está activo; de ser así, anula las paletas de color asignadas a los fantasmas y renderiza en su lugar el mapa de animación de "fantasma asustado" (frameFantasmaAzul[]).
+
+Optimización Geométrica y Control de Estado
+La matriz lógica se ajustó verticalmente reduciendo su resolución a 22×28 celdas, disminuyendo la altura de la ventana a unos proporcionales 352 píxeles. Asimismo, se implementó un sistema de control de estado (juegoEnPausa) mapeado a la tecla P, congelando el reloj lógico y las físicas en tiempo real con un consumo mínimo de CPU.
+
+
+
+
+
+Código final
+Las modificaciones que se hicieron para llegar al código final fueron las siguientes:
+Optimización del Dibujo Localizado 
+Se eliminó por completo el refresco global de la pantalla mediante llamadas al sistema que causaban parpadeo (flicker). En su lugar, el motor gráfico ahora utiliza un sistema de posicionamiento localizado mediante la función gotoxy(), actualizando de forma exclusiva los caracteres que sufren modificaciones (la nueva posición de la cabeza y el vaciado del último segmento de la cola), lo que otorga una tasa de refresco fluida y estable.
+Desplazamiento Sincrónico de Memoria 
+Se reestructuró la lógica de actualización del cuerpo para prevenir la duplicación o desfasamiento de segmentos (rastros "fantasma"). El juego implementa un ciclo inverso que arrastra el vector de coordenadas desde el último segmento de la cola hasta el cuello (cuerpo_x[i]=cuerpo_x[i−1]), asegurando que el crecimiento y la trayectoria de la serpiente sigan fielmente la cuadrícula sin desfases lógicos.
+Auditoría Absoluta de Colisiones Internas 
+Se sustituyó el control de impacto inmediato por un algoritmo de detección por barrido completo. A través de un bucle iterativo que recorre la totalidad del arreglo de la serpiente, el sistema verifica de forma estricta si las coordenadas actuales de la cabeza (x,y) coinciden con cualquier coordenada activa de su propio cuerpo, garantizando la activación inmediata de la rutina de fin de juego.
+
+#define SDL_MAIN_HANDLED
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+#include <time.h>
+
+
+#define FILAS 22
+#define COLUMNAS 28
+#define TAM_CASILLA 16
+#define WINDOW_WIDTH (COLUMNAS * TAM_CASILLA)
+#define ALTO_MARCADOR 32
+#define WINDOW_HEIGHT ((FILAS * TAM_CASILLA) + ALTO_MARCADOR)
+#define MAX_FANTASMAS 6
+
+
+// Matriz (1=Muro, 0=Pellet normal, 3=Pellet de Poder, 4=Items, 2=Vacío)
+int mapa[FILAS][COLUMNAS] = {
+    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+    {1, 3, 0, 2, 0, 0, 1, 0, 2, 0, 2, 0, 1, 0, 2, 1, 0, 2, 0, 2, 0, 1, 0, 2, 0, 2, 3, 1},
+    {1, 2, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1, 2, 0, 1, 0, 1, 1, 1, 2, 1, 2, 1, 1, 1, 2, 1},
+    {1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 2, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
+    {1, 2, 2, 0, 2, 2, 2, 2, 2, 2, 0, 2, 3, 2, 0, 2, 2, 2, 2, 0, 2, 0, 2, 0, 2, 0, 2, 1},
+    {1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 1, 1, 1, 0, 1},
+    {1, 2, 2, 0, 0, 2, 1, 2, 2, 0, 2, 2, 1, 1, 1, 1, 2, 0, 2, 0, 2, 1, 2, 2, 0, 2, 2, 1},
+    {1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1},
+    {0, 2, 2, 0, 2, 2, 2, 1, 1, 2, 0, 2, 0, 2, 0, 2, 2, 2, 2, 1, 1, 0, 2, 2, 0, 2, 2, 0},
+    {1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 2, 0, 1, 1, 1, 1, 1},
+    {0, 2, 0, 2, 0, 2, 2, 2, 0, 2, 1, 0, 2, 0, 2, 0, 2, 1, 2, 2, 0, 0, 2, 2, 0, 2, 0, 0},
+    {1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 2, 0, 1, 1, 1, 1, 1},
+    {0, 0, 2, 0, 2, 2, 2, 1, 1, 2, 0, 2, 0, 2, 0, 2, 0, 2, 2, 1, 1, 0, 2, 0, 2, 0, 2, 0},
+    {1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 2, 0, 1, 1, 1, 1, 1},
+    {1, 2, 0, 2, 0, 2, 2, 2, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 0, 0, 2, 0, 2, 0, 2, 1},
+    {1, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 2, 0, 0, 1, 1, 2, 0, 1, 1, 1, 0, 1},
+    {1, 0, 2, 0, 1, 2, 2, 1, 1, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 1, 1, 0, 2, 1, 0, 2, 0, 1},
+    {1, 1, 1, 0, 1, 0, 0, 1, 1, 2, 0, 2, 0, 2, 4, 2, 0, 2, 0, 1, 1, 2, 0, 1, 0, 1, 1, 1},
+    {1, 2, 0, 2, 0, 2, 0, 2, 0, 2, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 0, 2, 0, 2, 0, 2, 1},
+    {1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1},
+    {1, 3, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 1, 1, 2, 0, 2, 0, 2, 0, 2, 0, 2, 0, 2, 3, 1},
+    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
+};
+
+
+int mapaOriginal[FILAS][COLUMNAS];
+
+
+SDL_Texture* texturaHojaSprites = NULL;
+
+
+SDL_Rect cajasFantasmasSrc[MAX_FANTASMAS] = {
+    { 401, 83, 16, 16 }, // Fantasma Rojo
+    { 418, 83, 16, 16 }, // Fantasma Rosa
+    { 435, 83, 16, 16 }, // Fantasma Naranja
+    { 452, 83, 16, 16 }, // Fantasma Cian
+    { 401, 83, 16, 16 }, // Fantasma Gris
+    { 418, 83, 16, 16 }  // Fantasma Peach
+};
+
+
+SDL_Rect spritesItems[9] = {
+    { 618, 489, 16, 16 }, // 0 = Fresa
+    { 401, 489, 16, 16 }, // 1 = Melón
+    { 835, 489, 16, 16 }, // 2 = Manzana
+    { 69, 675, 16, 16 },  // 3 = Fruta mala
+    { 852, 489, 16, 16 }, // 4 = Galleta Bonus
+    { 503, 540, 16, 16 }, // 5 = Píldora de poder
+    { 120, 168, 16, 16 }, // 6 = Explosión mala
+    { 435, 354, 16, 16 }, // 7 = Letrero de "200" (Fantasmas)
+    { 869, 540, 16, 16 }  // 8 = Letrero de "800" (Explosión)
+};
+
+
+SDL_Rect frameFantasmaAzul[2] = { { 401, 168, 16, 16 }, { 418, 168, 16, 16 } };
+SDL_Rect framesPacmanAnim[2] = { { 503, 337, 16, 16 }, { 503, 354, 16, 16 } };
+
+
+typedef struct {
+    int x, y;
+    int dx, dy;
+    int nextDx, nextDy;
+    int currentFrame;
+} Player;
+
+
+typedef struct {
+    int x, y;
+    int dx, dy;
+    int currentFrame;
+    int idColor;
+    bool vivo;
+} Ghost;
+
+
+Player pacman;
+Ghost fantasmas[MAX_FANTASMAS];
+
+
+int nivel = 1;
+int numFantasmasActivos = 1;
+int score = 0;
+int lives = 3;
+int pelletsRestantes = 0;
+
+
+bool juegoEnPausa = false;
+bool esperandoReinicio = false;
+bool gameOver = false;
+bool modoLlaveAzul = false;
+unsigned int tiempoFinPoder = 0;
+
+
+unsigned int lastAnimTime = 0;
+unsigned int lastLogicTime = 0;
+
+
+bool frutaVisible = false;
+unsigned int tiempoProximaFruta = 0;
+unsigned int tiempoDesaparecerFruta = 0;
+int frutaFila = 10;  
+int frutaColumna = 13;
+
+
+// Control de la Pantalla de Inicio, Game Over e Índices dinámicos
+bool pantallaInicio = true;
+bool pantallaGameOver = false; // PANTALLA GRÁFICA
+int indiceFrutaActiva = 0;
+int indiceMaloActivo = 3;  
+
+
+// Variables globales para el letrero flotante de puntuaciones
+bool mostrarPuntosFlotantes = false;
+unsigned int tiempoFinPuntos = 0;
+int puntosFlotantesX = 0;
+int puntosFlotantesY = 0;
+int indicePuntosFlotantesA_Dibujar = 7;
+
+
+bool esMuro(int xPixels, int yPixels) {
+    int esquinasX[4] = {xPixels, xPixels + TAM_CASILLA - 1, xPixels, xPixels + TAM_CASILLA - 1};
+    int esquinasY[4] = {yPixels, yPixels, yPixels + TAM_CASILLA - 1, yPixels + TAM_CASILLA - 1};
+
+
+    for (int i = 0; i < 4; i++) {
+        int col = esquinasX[i] / TAM_CASILLA;
+        int fil = esquinasY[i] / TAM_CASILLA;
+        if (col < 0 || col >= COLUMNAS || fil < 0 || fil >= FILAS)
+            return true;
+        if (mapa[fil][col] == 1)
+            return true;
+    }
+    return false;
+}
+
+
+void resetPosiciones() {
+    pacman.x = 13 * TAM_CASILLA;
+    pacman.y = 10 * TAM_CASILLA;
+    pacman.dx = 0;
+    pacman.dy = 0;
+    pacman.nextDx = 0;
+    pacman.nextDy = 0;
+
+
+    numFantasmasActivos = nivel;
+    if (numFantasmasActivos > MAX_FANTASMAS)
+        numFantasmasActivos = MAX_FANTASMAS;
+
+
+    for (int i = 0; i < numFantasmasActivos; i++) {
+        fantasmas[i].x = (11 + i) * TAM_CASILLA;
+        fantasmas[i].y = 4 * TAM_CASILLA;
+        fantasmas[i].dx = (rand() % 2 == 0) ? 1 : -1;
+        fantasmas[i].dy = 0;
+        fantasmas[i].idColor = i;
+        fantasmas[i].vivo = true;
+    }
+
+
+    pelletsRestantes = 0;
+    for (int f = 0; f < FILAS; f++) {
+        for (int c = 0; c < COLUMNAS; c++) {
+            if (mapa[f][c] == 0 || mapa[f][c] == 3 || mapa[f][c] == 4 || mapa[f][c] == 5) {
+                pelletsRestantes++;
+            }
+        }
+    }
+   
+    frutaVisible = false;
+    tiempoProximaFruta = SDL_GetTicks() + 10000 + (rand() % 8000);
+    esperandoReinicio = true;
+}
+
+
+void dibujarLetraGrande(SDL_Renderer *renderer, char letra, int x, int y, int r, int g, int b) {
+    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
+    if (letra == 'P') {
+        SDL_Rect seg[] = {{x, y, 20, 6}, {x, y, 6, 32}, {x+14, y, 6, 20}, {x, y+14, 20, 6}};
+        for(int i=0; i<4; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'A') {
+        SDL_Rect seg[] = {{x, y, 20, 6}, {x, y, 6, 32}, {x+14, y, 6, 32}, {x, y+14, 20, 6}};
+        for(int i=0; i<4; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'C') {
+        SDL_Rect seg[] = {{x, y, 20, 6}, {x, y, 6, 32}, {x, y+26, 20, 6}};
+        for(int i=0; i<3; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'G') {
+        SDL_Rect seg[] = {{x, y, 20, 6}, {x, y, 6, 32}, {x, y+26, 20, 6}, {x+14, y+16, 6, 16}, {x+8, y+16, 8, 6}};
+        for(int i=0; i<5; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'I') {
+        SDL_Rect seg[] = {{x, y, 18, 6}, {x+6, y, 6, 32}, {x, y+26, 18, 6}};
+        for(int i=0; i<3; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'R') {
+        SDL_Rect seg[] = {
+            {x, y, 20, 6},      
+            {x, y, 6, 32},      
+            {x+14, y, 6, 18},    
+            {x, y+14, 20, 6},    
+            {x+12, y+20, 8, 12}  
+        };
+        for(int i=0; i<5; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'L') {
+        SDL_Rect seg[] = {{x, y, 6, 32}, {x, y+26, 20, 6}};
+        for(int i=0; i<2; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'S') {
+        SDL_Rect seg[] = {{x, y, 20, 6}, {x, y, 6, 16}, {x, y+13, 20, 6}, {x+14, y+16, 6, 16}, {x, y+26, 20, 6}};
+        for(int i=0; i<5; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'E') {
+        SDL_Rect seg[] = {{x, y, 20, 6}, {x, y, 6, 32}, {x, y+13, 16, 6}, {x, y+26, 20, 6}};
+        for(int i=0; i<4; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'M') {
+        SDL_Rect seg[] = {{x, y, 6, 32}, {x+14, y, 6, 32}, {x+4, y+4, 4, 8}, {x+8, y+4, 4, 8}};
+        for(int i=0; i<4; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'O') {
+        SDL_Rect seg[] = {{x, y, 20, 6}, {x, y, 6, 32}, {x+14, y, 6, 32}, {x, y+26, 20, 6}};
+        for(int i=0; i<4; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'V') {
+        SDL_Rect seg[] = {{x, y, 6, 24}, {x+14, y, 6, 24}, {x+4, y+24, 4, 8}, {x+10, y+24, 4, 8}};
+        for(int i=0; i<4; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+}
+
+
+void dibujarLetraChica(SDL_Renderer *renderer, char letra, int x, int y, int r, int g, int b) {
+    SDL_SetRenderDrawColor(renderer, r, g, b, 255);
+    if (letra == 'P') {
+        SDL_Rect seg[] = {{x, y, 10, 3}, {x, y, 3, 16}, {x+7, y, 3, 10}, {x, y+8, 10, 3}};
+        for(int i=0; i<4; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'A') {
+        SDL_Rect seg[] = {{x, y, 10, 3}, {x, y, 3, 16}, {x+7, y, 3, 16}, {x, y+8, 10, 3}};
+        for(int i=0; i<4; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'C') {
+        SDL_Rect seg[] = {{x, y, 10, 3}, {x, y, 3, 16}, {x, y+14, 10, 3}};
+        for(int i=0; i<3; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'E') {
+        SDL_Rect seg[] = {{x, y, 10, 3}, {x, y, 3, 16}, {x, y+7, 8, 3}, {x, y+14, 10, 3}};
+        for(int i=0; i<4; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'M') {
+        SDL_Rect seg[] = {{x, y, 3, 16}, {x+7, y, 3, 16}, {x+2, y+2, 2, 4}, {x+4, y+2, 2, 4}};
+        for(int i=0; i<4; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'Z') {
+        SDL_Rect seg[] = {{x, y, 10, 3}, {x, y+14, 10, 3}, {x+6, y+2, 3, 4}, {x+4, y+6, 3, 4}, {x+2, y+10, 3, 4}};
+        for(int i=0; i<5; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'R') {
+        SDL_Rect seg[] = {{x, y, 10, 3}, {x, y, 3, 16}, {x+7, y, 3, 9}, {x, y+8, 10, 3}, {x+6, y+10, 4, 6}};
+        for(int i=0; i<5; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'S') {
+        SDL_Rect seg[] = {{x, y, 10, 3}, {x, y, 3, 10}, {x, y+8, 10, 3}, {x+7, y+8, 3, 8}, {x, y+14, 10, 3}};
+        for(int i=0; i<5; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'U') {
+        SDL_Rect seg[] = {{x, y, 3, 16}, {x+7, y, 3, 16}, {x, y+14, 10, 3}};
+        for(int i=0; i<3; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'O') {
+        SDL_Rect seg[] = {{x, y, 10, 3}, {x, y, 3, 16}, {x+7, y, 3, 16}, {x, y+14, 10, 3}};
+        for(int i=0; i<4; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'L') {
+        SDL_Rect seg[] = {{x, y, 3, 16}, {x, y+14, 10, 3}};
+        for(int i=0; i<2; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'I') {
+        SDL_Rect seg[] = {{x, y, 9, 3}, {x+3, y, 3, 16}, {x, y+14, 9, 3}};
+        for(int i=0; i<3; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'X') {
+        SDL_Rect seg[] = {{x, y, 3, 5}, {x+7, y, 3, 5}, {x+3, y+5, 4, 6}, {x, y+11, 3, 5}, {x+7, y+11, 3, 5}};
+        for(int i=0; i<5; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'N') {
+        SDL_Rect seg[] = {{x, y, 3, 16}, {x+7, y, 3, 16}, {x+3, y+3, 4, 4}};
+        for(int i=0; i<3; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'F') {
+        SDL_Rect seg[] = {{x, y, 10, 3}, {x, y, 3, 16}, {x, y+7, 8, 3}};
+        for(int i=0; i<3; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'V') {
+        SDL_Rect seg[] = {{x, y, 3, 12}, {x+7, y, 3, 12}, {x+3, y+12, 4, 4}};
+        for(int i=0; i<3; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'T') {
+        SDL_Rect seg[] = {{x, y, 10, 3}, {x+4, y, 3, 16}};
+        for(int i=0; i<2; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'J') {
+        SDL_Rect seg[] = {{x+7, y, 3, 14}, {x, y+12, 3, 4}, {x, y+14, 10, 3}};
+        for(int i=0; i<3; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+    else if (letra == 'G') {
+        SDL_Rect seg[] = {{x, y, 10, 3}, {x, y, 3, 16}, {x, y+14, 10, 3}, {x+7, y+8, 3, 8}, {x+4, y+8, 4, 3}};
+        for(int i=0; i<5; i++) SDL_RenderFillRect(renderer, &seg[i]);
+    }
+}
+
+
+void dibujarTextoChico(SDL_Renderer *renderer, const char *texto, int x, int y, int r, int g, int b) {
+    int i = 0;
+    while (texto[i] != '\0') {
+        if (texto[i] != ' ') {
+            dibujarLetraChica(renderer, texto[i], x + (i * 14), y, r, g, b);
+        }
+        i++;
+    }
+}
+
+
+void dibujarNumero(SDL_Renderer *renderer, int numero, int x, int y) {
+    char digitos[10][7] = {
+        {1,1,1,1,1,1,0}, {0,1,1,0,0,0,0}, {1,1,0,1,1,0,1}, {1,1,1,1,0,0,1}, {0,1,1,0,0,1,1},
+        {1,0,1,1,0,1,1}, {1,0,1,1,1,1,1}, {1,1,1,0,0,0,0}, {1,1,1,1,1,1,1}, {1,1,1,1,0,1,1}
+    };
+
+
+    int n = numero % 10;
+    SDL_Rect segmentos[7] = {
+        {x, y, 10, 3}, {x+7,y, 3, 10}, {x+7,y+8, 3, 10}, {x, y+16, 10, 3},
+        {x, y+8, 3, 10}, {x, y, 3, 10}, {x, y+8, 10, 3}
+    };
+
+
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    for (int i = 0; i < 7; i++) {
+        if (digitos[n][i] == 1) {
+            SDL_RenderFillRect(renderer, &segmentos[i]);
+        }
+    }
+}
+
+
+void dibujarValor(SDL_Renderer *renderer, int valor, int x, int y) {
+    int temp = valor;
+    int digitos[5] = {0};
+    for (int i = 4; i >= 0; i--) {
+        digitos[i] = temp % 10;
+        temp /= 10;
+    }
+    for (int i = 0; i < 5; i++) {
+        dibujarNumero(renderer, digitos[i], x + (i * 14), y);
+    }
+}
+
+
+// FUNCIÓN PRINCIPAL MAIN
+int main(int argc, char *argv[]) {
+    SDL_SetMainReady();
+    srand((unsigned int)time(NULL));
+    SDL_Init(SDL_INIT_VIDEO);
+
+
+    for (int f = 0; f < FILAS; f++) {
+        for (int c = 0; c < COLUMNAS; c++) {
+            mapaOriginal[f][c] = mapa[f][c];
+        }
+    }
+
+
+    int anchoVentana = 28 * 16;
+    int altoVentana = (22 * 16) + 40;
+   
+    SDL_Window *window = SDL_CreateWindow("Pac-Girls Ultimate Arcade FP", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, anchoVentana, altoVentana, 0);
+    SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+
+    IMG_Init(IMG_INIT_PNG);
+
+
+    texturaHojaSprites = IMG_LoadTexture(renderer, "image_85babf.png");
+    if (!texturaHojaSprites) {
+        printf("Error: ¡No encontré el archivo image_85babf.png!\n");
+    }
+
+
+    resetPosiciones();
+    esperandoReinicio = false;
+
+
+    bool running = true;
+    SDL_Event event;
+
+
+    while (running && !gameOver) {
+        unsigned int currentTime = SDL_GetTicks();
+
+
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT)
+                running = false;
+            if (event.type == SDL_KEYDOWN) {
+                switch (event.key.keysym.sym) {
+                case SDLK_x: running = false; break;
+                case SDLK_p: juegoEnPausa = !juegoEnPausa; break;
+                case SDLK_SPACE:
+                    if (pantallaInicio) {
+                        pantallaInicio = false;
+                    }
+                    if (esperandoReinicio) esperandoReinicio = false;
+                    break;
+                case SDLK_w: pacman.nextDx = 0;  pacman.nextDy = -1; break;
+                case SDLK_s: pacman.nextDx = 0;  pacman.nextDy = 1;  break;
+                case SDLK_a: pacman.nextDx = -1; pacman.nextDy = 0;  break;
+                case SDLK_d: pacman.nextDx = 1;  pacman.nextDy = 0;  break;
+                }
+            }
+        }
+
+
+        if (juegoEnPausa) {
+            SDL_Delay(16);
+            continue;
+        }
+
+
+        if (mostrarPuntosFlotantes && currentTime > tiempoFinPuntos) {
+            mostrarPuntosFlotantes = false;
+        }
+
+
+        if (modoLlaveAzul && currentTime > tiempoFinPoder) {
+            modoLlaveAzul = false;
+        }
+
+
+        if (!pantallaInicio && !pantallaGameOver && !esperandoReinicio && (currentTime > lastLogicTime + 16)) {
+           
+            // Spawn aleatorio
+            if (!frutaVisible && currentTime > tiempoProximaFruta) {
+                if (rand() % 2 == 0) {
+                    mapa[frutaFila][frutaColumna] = 4;
+                    int poolFrutas[4] = {0, 1, 2, 4};
+                    indiceFrutaActiva = poolFrutas[rand() % 4];
+                } else {
+                    mapa[frutaFila][frutaColumna] = 5;
+                    indiceMaloActivo = (rand() % 2 == 0) ? 3 : 6;
+                }
+                frutaVisible = true;
+                pelletsRestantes++;
+                tiempoDesaparecerFruta = currentTime + 8000 + (rand() % 4000);
+            }
+            else if (frutaVisible && currentTime > tiempoDesaparecerFruta) {
+                if (mapa[frutaFila][frutaColumna] == 4 || mapa[frutaFila][frutaColumna] == 5) {
+                    mapa[frutaFila][frutaColumna] = 2;
+                    pelletsRestantes--;
+                }
+                frutaVisible = false;
+                tiempoProximaFruta = currentTime + 12000 + (rand() % 10000);
+            }
+
+
+            if (pacman.x % TAM_CASILLA == 0 && pacman.y % TAM_CASILLA == 0) {
+                if (!esMuro(pacman.x + pacman.nextDx * 2, pacman.y + pacman.nextDy * 2)) {
+                    pacman.dx = pacman.nextDx;
+                    pacman.dy = pacman.nextDy;
+                }
+            }
+
+
+            // Teletransportación
+            if (pacman.x <= 0 && pacman.dx == -1) {
+                pacman.x = (COLUMNAS - 1) * TAM_CASILLA - 2;
+            }
+            else if (pacman.x >= (COLUMNAS - 1) * TAM_CASILLA && pacman.dx == 1) {
+                pacman.x = 2;
+            }
+            else if (esMuro(pacman.x + pacman.dx * 2, pacman.y + pacman.dy * 2)) {
+                pacman.dx = 0;
+                pacman.dy = 0;
+            }
+            else {
+                pacman.x += pacman.dx * 2;
+                pacman.y += pacman.dy * 2;
+            }
+
+
+            int pacmanCol = (pacman.x + TAM_CASILLA / 2) / TAM_CASILLA;
+            int pacmanFil = (pacman.y + TAM_CASILLA / 2) / TAM_CASILLA;
+
+
+            if (pacmanCol >= 0 && pacmanCol < COLUMNAS && pacmanFil >= 0 && pacmanFil < FILAS) {
+                int tipoCasilla = mapa[pacmanFil][pacmanCol];
+
+
+                if (tipoCasilla == 0 || tipoCasilla == 3 || tipoCasilla == 4 || tipoCasilla == 5) {
+                    mapa[pacmanFil][pacmanCol] = 2;
+                    pelletsRestantes--;
+
+
+                    if (tipoCasilla == 0) score += 10;
+                    else if (tipoCasilla == 3) {
+                        score += 20;
+                        modoLlaveAzul = true;
+                        tiempoFinPoder = currentTime + 10000;
+                    }
+                    else if (tipoCasilla == 4) {
+                        if (indiceFrutaActiva == 4) score += 500;
+                        else if (indiceFrutaActiva == 2) score += 200;
+                        else score += 100;
+                       
+                        frutaVisible = false;
+                        tiempoProximaFruta = currentTime + 15000 + (rand() % 10000);
+                    }
+                    else if (tipoCasilla == 5) {
+                        if (indiceMaloActivo == 3) {
+                            score -= 50;          
+                            modoLlaveAzul = false;
+                            numFantasmasActivos += 2;
+                            if (numFantasmasActivos > MAX_FANTASMAS) numFantasmasActivos = MAX_FANTASMAS;
+                           
+                            for (int i = 0; i < numFantasmasActivos; i++) {
+                                fantasmas[i].x = (11 + (i % 3)) * TAM_CASILLA;
+                                fantasmas[i].y = 4 * TAM_CASILLA;
+                                fantasmas[i].vivo = true;
+                            }
+                        } else {
+                            score -= 800;
+                            if (score < 0) score = 0;
+
+
+                            puntosFlotantesX = pacmanCol * TAM_CASILLA;
+                            puntosFlotantesY = pacmanFil * TAM_CASILLA;
+                            indicePuntosFlotantesA_Dibujar = 8;
+                            mostrarPuntosFlotantes = true;
+                            tiempoFinPuntos = currentTime + 1000;
+                        }
+
+
+                        frutaVisible = false;
+                        tiempoProximaFruta = currentTime + 15000 + (rand() % 10000);
+                    }
+
+
+                    if (pelletsRestantes <= 0) {
+                        nivel++;
+                        if (nivel > 6) nivel = 1;
+
+
+                        for (int f = 0; f < FILAS; f++) {
+                            for (int c = 0; c < COLUMNAS; c++) {
+                                mapa[f][c] = mapaOriginal[f][c];
+                            }
+                        }
+                        resetPosiciones();
+                        esperandoReinicio = false;
+                    }
+                }
+            }
+
+
+            // Lógica Fantasmas
+            for (int i = 0; i < numFantasmasActivos; i++) {
+                if (!fantasmas[i].vivo) continue;
+
+
+                if (fantasmas[i].x % TAM_CASILLA == 0 && fantasmas[i].y % TAM_CASILLA == 0) {
+                    int dirX[4] = {1, -1, 0, 0};
+                    int dirY[4] = {0, 0, 1, -1};
+                    int opcionesValidas[4];
+                    int contOpciones = 0;
+
+
+                    for (int d = 0; d < 4; d++) {
+                        if (dirX[d] == -fantasmas[i].dx && dirY[d] == -fantasmas[i].dy) continue;
+                        if (!esMuro(fantasmas[i].x + dirX[d] * TAM_CASILLA, fantasmas[i].y + dirY[d] * TAM_CASILLA)) {
+                            opcionesValidas[contOpciones] = d;
+                            contOpciones++;
+                        }
+                    }
+
+
+                    if (contOpciones > 0) {
+                        int seleccionada = opcionesValidas[rand() % contOpciones];
+                        fantasmas[i].dx = dirX[seleccionada];
+                        fantasmas[i].dy = dirY[seleccionada];
+                    } else {
+                        fantasmas[i].dx = -fantasmas[i].dx;
+                        fantasmas[i].dy = -fantasmas[i].dy;
+                    }
+                }
+
+
+                if (fantasmas[i].x <= 0 && fantasmas[i].dx == -1) {
+                    fantasmas[i].x = (COLUMNAS - 1) * TAM_CASILLA - 2;
+                }
+                else if (fantasmas[i].x >= (COLUMNAS - 1) * TAM_CASILLA && fantasmas[i].dx == 1) {
+                    fantasmas[i].x = 2;
+                }
+                else {
+                    fantasmas[i].x += fantasmas[i].dx * 2;
+                    fantasmas[i].y += fantasmas[i].dy * 2;
+                }
+
+
+                if (abs(pacman.x - fantasmas[i].x) < 12 && abs(pacman.y - fantasmas[i].y) < 12) {
+                    if (modoLlaveAzul) {
+                        score += 200;
+                       
+                        fantasmas[i].x = 13 * TAM_CASILLA;
+                        fantasmas[i].y = 4 * TAM_CASILLA;
+
+
+                        puntosFlotantesX = pacman.x;
+                        puntosFlotantesY = pacman.y;
+                        indicePuntosFlotantesA_Dibujar = 7;
+                        mostrarPuntosFlotantes = true;
+                        tiempoFinPuntos = currentTime + 1000;
+                    } else {
+                        lives--;
+                        if (lives <= 0) {
+                            pantallaGameOver = true; // === ACTIVA LA PANTALLA GRÁFICA EN LUGAR DE CERRAR ===
+                        }
+                        else resetPosiciones();
+                    }
+                }
+            }
+            lastLogicTime = currentTime;
+        }
+
+
+        if (currentTime > lastAnimTime + 150) {
+            pacman.currentFrame = (pacman.currentFrame + 1) % 2;
+            for (int i = 0; i < numFantasmasActivos; i++) {
+                fantasmas[i].currentFrame = (fantasmas[i].currentFrame + 1) % 2;
+            }
+            lastAnimTime = currentTime;
+        }
+
+
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
+
+
+        // PANTALLA DE INICIO ARCADE
+        if (pantallaInicio) {
+            dibujarLetraGrande(renderer, 'P', 110,  70, 255, 0, 0);    
+            dibujarLetraGrande(renderer, 'A', 134,  70, 255, 128, 0);  
+            dibujarLetraGrande(renderer, 'C', 158,  70, 255, 255, 0);  
+           
+            dibujarLetraGrande(renderer, 'G', 200, 70, 0, 255, 255);
+            dibujarLetraGrande(renderer, 'I', 224, 70, 0, 255, 255);
+            dibujarLetraGrande(renderer, 'R', 248, 70, 0, 255, 255);
+            dibujarLetraGrande(renderer, 'L', 272, 70, 0, 255, 255);
+            dibujarLetraGrande(renderer, 'S', 296, 70, 0, 255, 255);
+
+
+            dibujarTextoChico(renderer, "ESPACIO  EMPEZAR", 112, 170, 0, 255, 0);
+            dibujarTextoChico(renderer, "P  PAUSA", 168, 210, 255, 255, 255);    
+            dibujarTextoChico(renderer, "X  SALIR", 168, 250, 255, 255, 255);    
+           
+            SDL_Rect decoracionPacman = { 290, 250, 16, 16 };
+            if (texturaHojaSprites) {
+                SDL_RenderCopy(renderer, texturaHojaSprites, &framesPacmanAnim[0], &decoracionPacman);
+            }
+
+
+            SDL_RenderPresent(renderer);
+            SDL_Delay(16);
+            continue;
+        }
+
+
+        // PANTALLA DE GAME OVER
+        if (pantallaGameOver) {
+            dibujarLetraGrande(renderer, 'G', 120, 60, 255, 0, 0);
+            dibujarLetraGrande(renderer, 'A', 144, 60, 255, 0, 0);
+            dibujarLetraGrande(renderer, 'M', 168, 60, 255, 0, 0);
+            dibujarLetraGrande(renderer, 'E', 192, 60, 255, 0, 0);
+
+
+            dibujarLetraGrande(renderer, 'O', 230, 60, 255, 0, 0);
+            dibujarLetraGrande(renderer, 'V', 254, 60, 255, 0, 0);
+            dibujarLetraGrande(renderer, 'E', 278, 60, 255, 0, 0);
+            dibujarLetraGrande(renderer, 'R', 302, 60, 255, 0, 0);
+
+
+            dibujarTextoChico(renderer, "PUNTAJE  FINAL", 100, 140, 255, 255, 255);
+            dibujarValor(renderer, score, 310, 140);
+
+
+            dibujarTextoChico(renderer, "NIVEL", 150, 180, 255, 255, 255);
+            dibujarNumero(renderer, nivel, 250, 180);
+
+
+            dibujarTextoChico(renderer, "ESPACIO  REINTENTAR", 90, 240, 0, 255, 0);
+            dibujarTextoChico(renderer, "X  SALIR", 160, 280, 255, 255, 0);
+
+
+            while (SDL_PollEvent(&event)) {
+                if (event.type == SDL_QUIT) running = false;
+                if (event.type == SDL_KEYDOWN) {
+                    if (event.key.keysym.sym == SDLK_x) {
+                        running = false;
+                    }
+                    if (event.key.keysym.sym == SDLK_SPACE) {
+                        // Reseteo total del estado de juego
+                        score = 0;
+                        nivel = 1;
+                        lives = 3;
+                        for (int f = 0; f < FILAS; f++) {
+                            for (int c = 0; c < COLUMNAS; c++) {
+                                mapa[f][c] = mapaOriginal[f][c];
+                            }
+                        }
+                        resetPosiciones();
+                        pantallaGameOver = false;
+                        esperandoReinicio = false;
+                    }
+                }
+            }
+
+
+            SDL_RenderPresent(renderer);
+            SDL_Delay(16);
+            continue;
+        }
+
+
+        // Dibujar Muros
+        SDL_Rect rCasilla = {0, 0, TAM_CASILLA, TAM_CASILLA};
+        for (int f = 0; f < FILAS; f++) {
+            for (int c = 0; c < COLUMNAS; c++) {
+                if (mapa[f][c] == 1) {
+                    rCasilla.x = c * TAM_CASILLA;
+                    rCasilla.y = f * TAM_CASILLA;
+                   
+                    if (nivel % 3 == 1) SDL_SetRenderDrawColor(renderer, 0, 90, 255, 255);
+                    else if (nivel % 3 == 2) SDL_SetRenderDrawColor(renderer, 230, 40, 40, 255);
+                    else SDL_SetRenderDrawColor(renderer, 40, 180, 40, 255);
+                   
+                    SDL_RenderFillRect(renderer, &rCasilla);
+                }
+            }
+        }
+
+
+        // Dibujar Comestibles
+        for (int f = 0; f < FILAS; f++) {
+            for (int c = 0; c < COLUMNAS; c++) {
+                SDL_Rect destItem = { c * TAM_CASILLA, f * TAM_CASILLA, TAM_CASILLA, TAM_CASILLA };
+               
+                if (mapa[f][c] == 0) {
+                    SDL_SetRenderDrawColor(renderer, 240, 190, 20, 255);
+                    SDL_Rect monedita = { (c * TAM_CASILLA) + 6, (f * TAM_CASILLA) + 2, 4, 12 };
+                    SDL_RenderFillRect(renderer, &monedita);
+                }
+                else if (mapa[f][c] == 3) {
+                    if (texturaHojaSprites) {
+                        SDL_RenderCopy(renderer, texturaHojaSprites, &spritesItems[5], &destItem);
+                    }
+                }
+                else if (mapa[f][c] == 4) {
+                    if (texturaHojaSprites) {
+                        SDL_RenderCopy(renderer, texturaHojaSprites, &spritesItems[indiceFrutaActiva], &destItem);
+                    }
+                }
+                else if (mapa[f][c] == 5) {
+                    if (texturaHojaSprites) {
+                        SDL_RenderCopy(renderer, texturaHojaSprites, &spritesItems[indiceMaloActivo], &destItem);
+                    }
+                }
+            }
+        }
+
+
+        // Dibujar Fantasmas
+        for (int i = 0; i < numFantasmasActivos; i++) {
+            SDL_Rect destGhost = {fantasmas[i].x, fantasmas[i].y, TAM_CASILLA, TAM_CASILLA};
+           
+            if (texturaHojaSprites) {
+                if (modoLlaveAzul) {
+                    SDL_RenderCopy(renderer, texturaHojaSprites, &frameFantasmaAzul[fantasmas[i].currentFrame], &destGhost);
+                } else {
+                    double anguloG = 0.0;
+                    SDL_RendererFlip flipG = SDL_FLIP_NONE;
+
+
+                    if (fantasmas[i].dx == -1) {
+                        flipG = SDL_FLIP_HORIZONTAL;
+                    }
+                    else if (fantasmas[i].dx == 1) {
+                        anguloG = 0.0;
+                    }
+               
+                    SDL_RenderCopyEx(renderer, texturaHojaSprites, &cajasFantasmasSrc[fantasmas[i].idColor],
+                                     &destGhost, anguloG, NULL, flipG);
+                }
+            }
+        }
+
+
+        // Dibujar Jugador
+        SDL_Rect destPacman = {pacman.x, pacman.y, TAM_CASILLA, TAM_CASILLA};
+        if (texturaHojaSprites) {
+            double angulo = 0.0;
+            SDL_RendererFlip flip = SDL_FLIP_NONE;
+
+
+            if (pacman.dx == -1) {
+                flip = SDL_FLIP_HORIZONTAL;
+            }
+            else if (pacman.dx == 1) {
+                angulo = 0.0;
+            }
+            else if (pacman.dy == -1) {
+                angulo = 270.0;
+            }
+            else if (pacman.dy == 1) {
+                angulo = 90.0;
+            }
+
+
+            SDL_RenderCopyEx(renderer, texturaHojaSprites, &framesPacmanAnim[pacman.currentFrame],
+                             &destPacman, angulo, NULL, flip);
+        }
+
+
+        // Dibujar puntos flotantes (200 o 800)
+        if (mostrarPuntosFlotantes && texturaHojaSprites) {
+            SDL_Rect destPuntos = { puntosFlotantesX, puntosFlotantesY - 4, TAM_CASILLA, TAM_CASILLA };
+            SDL_RenderCopy(renderer, texturaHojaSprites, &spritesItems[indicePuntosFlotantesA_Dibujar], &destPuntos);
+        }
+
+
+        // Dibujar Marcador Compacto
+        int posYMarcador = 356;
+
+
+        for (int v = 0; v < lives; v++) {
+            SDL_Rect destVida = { 16 + (v * 20), posYMarcador, 16, 16 };
+            if (texturaHojaSprites) {
+                SDL_RenderCopy(renderer, texturaHojaSprites, &framesPacmanAnim[0], &destVida);
+            } else {
+                SDL_SetRenderDrawColor(renderer, 255, 235, 0, 255);
+                SDL_Rect cuadraditoVida = { 16 + (v * 20), posYMarcador + 2, 12, 12 };
+                SDL_RenderFillRect(renderer, &cuadraditoVida);
+            }
+        }
+
+
+        dibujarValor(renderer, score, 180, posYMarcador);
+
+
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        int posXLevel = 380;
+        SDL_Rect letraL_v = { posXLevel, posYMarcador, 3, 16 }; SDL_RenderFillRect(renderer, &letraL_v);
+        SDL_Rect letraL_h = { posXLevel, posYMarcador + 14, 8, 3 }; SDL_RenderFillRect(renderer, &letraL_h);
+
+
+        dibujarNumero(renderer, nivel, posXLevel + 16, posYMarcador);
+       
+        SDL_RenderPresent(renderer);
+        SDL_Delay(16);
+    }
+
+
+    if (texturaHojaSprites) {
+        SDL_DestroyTexture(texturaHojaSprites);
+    }
+
+
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+    return 0;
+}
+
+Pseudocódigo
+
+SUBPROCESO 1: INICIALIZAR EL MAPA
+=========================================================
+SubProceso InicializarMapa(mapa)
+	Definir f, c Como Entero
+	Definir map Como Entero
+	Dimension map[22, 28]
+	
+	Para f <- 1 Hasta 22 Con Paso 1 Hacer
+		Para c <- 1 Hasta 28 Con Paso 1 Hacer
+			
+			Si f == 1 O f == 22 O c == 1 O c == 28 Entonces
+				mapa[f, c] <- 1
+			Sino
+				Si (f == 2 Y c == 2) O (f == 2 Y c == 27) O (f == 21 Y c == 2) O (f == 21 Y c == 27) Entonces
+					mapa[f, c] <- 3
+				Sino
+					Si f >= 10 Y f <= 14 Y c >= 11 Y c <= 18 Entonces
+						mapa[f, c] <- 2
+					Sino
+						Si (f Mod 2 == 0) Y (c Mod 4 == 0) Entonces
+							mapa[f, c] <- 1
+						Sino
+							mapa[f, c] <- 0
+						FinSi
+					FinSi
+				FinSi
+			FinSi
+			
+		FinPara
+	FinPara
+	
+	Para f <- 1 Hasta 22 Con Paso 1 Hacer
+		Para c <- 1 Hasta 28 Con Paso 1 Hacer
+			Escribir Sin Saltar mapa[f, c], " "
+		FinPara
+		Escribir ""
+	FinPara
+FinSubProceso
+
+
+
+SUBPROCESO 2: RESPALDAR EL MAPA ORIGINAL
+=========================================================
+SubProceso CopiarMapaOriginal(mapa, mapaOriginal)
+	// 1. Declarar las variables de control para los ciclos
+	Definir f, c Como Entero
+	// 2. Declarar ambas matrices (Dimensiones de 22 filas por 28 columnas)
+	Definir mapa1, mapaOriginal1 Como Entero
+	Dimensionar mapa1(22,28)
+	Dimensionar mapaOriginal1(22,28)
+	// 3. Rellenar la matriz "mapa" principal
+	Para f<-1 Hasta 22 Con Paso 1 Hacer
+		Para c<-1 Hasta 28 Con Paso 1 Hacer
+			Si f==1 O f==22 O c==1 O c==28 Entonces
+				mapa[f,c] <- 1
+			SiNo
+				Si (f==2 Y c==2) O (f==2 Y c==27) O (f==21 Y c==2) O (f==21 Y c==27) Entonces
+					mapa[f,c] <- 3
+				SiNo
+					Si f>=10 Y f<=14 Y c>=11 Y c<=18 Entonces
+						mapa[f,c] <- 2
+					SiNo
+						Si (f MOD 2==0) Y (c MOD 4==0) Entonces
+							mapa[f,c] <- 1
+						SiNo
+							mapa[f,c] <- 0
+						FinSi
+					FinSi
+				FinSi
+			FinSi
+		FinPara
+	FinPara
+	4. PROCESO DE COPIADO (Esto equivale a "mapaOriginal[f][c] = mapa[f][c]" en C)
+	Para f<-1 Hasta 22 Con Paso 1 Hacer
+		Para c<-1 Hasta 28 Con Paso 1 Hacer
+			mapaOriginal[f,c] <- mapa[f,c]
+		FinPara
+	FinPara
+	// 5. Mostrar la matriz copia en pantalla para verificar que es idéntica
+	Escribir '=== MATRIZ MAPA ORIGINAL COPIADA ==='
+	Para f<-1 Hasta 22 Con Paso 1 Hacer
+		Para c<-1 Hasta 28 Con Paso 1 Hacer
+			Escribir mapaOriginal[f,c], ' 'Sin Saltar
+		FinPara
+		Escribir ''
+	FinPara
+FinSubProceso
+
+
+SUBPROCESO 3: DETECCIÓN DE MUROS
+=========================================================
+SubProceso VerificarMuro
+	1. Declarar variables de entrada y de matriz
+	Definir xPixels, yPixels, fila, columna, TAMANO_CELDA Como Entero
+	Definir mapa Como Entero
+	Dimension mapa[22, 28]
+	
+	2. Configuración inicial
+	TAMANO_CELDA <- 20 // Ajusta según el tamaño de tus sprites
+	
+	Escribir "Ingrese coordenada X en píxeles:"
+	Leer xPixels
+	Escribir "Ingrese coordenada Y en píxeles:"
+	Leer yPixels
+	
+	3. CONVERSIÓN: De Píxeles a Índices de Matriz
+	Sumamos 1 porque en PSeInt las matrices empiezan en 1, no en 0
+	columna <- Trunc(xPixels / TAMANO_CELDA) + 1
+	fila <- Trunc(yPixels / TAMANO_CELDA) + 1
+	
+	4. LÓGICA DE LA FUNCIÓN (El Rombo del Diagrama)
+	Verificamos si la posición en la matriz contiene un 1 (Muro)
+	Si fila > 0 Y fila <= 22 Y columna > 0 Y columna <= 28 Entonces
+		
+		Si mapa[fila, columna] == 1 Entonces
+			Escribir "RESULTADO: Es un muro (Verdadero)"
+		Sino
+			Escribir "RESULTADO: Camino libre (Falso)"
+		FinSi
+		
+	Sino
+		Escribir "Error: Coordenadas fuera de los límites del mapa"
+	FinSi
+FinSubProceso
+
+
+
+SUBPROCESO 4: REINICIAR POSICIONES DE JUEGO
+=========================================================
+SubProceso ReiniciarPosiciones
+	// 1. Declarar variables de Pac-Man y Fantasmas
+	Definir pacmanX, pacmanY, pacmanDx, pacmanDy Como Entero
+	Definir nextDx, nextDy Como Entero
+	
+	// Usamos arreglos para los fantasmas (soporta hasta 6 fantasmas)
+	Definir ghostX, ghostY, ghostDx, ghostDy Como Entero
+	Dimension ghostX[6], ghostY[6], ghostDx[6], ghostDy[6]
+	
+	// Variables de control y juego
+	Definir f, c, i, nivel, numFantasmasActivos, pelletsRestantes Como Entero
+	Definir TAM_CASILLA Como Entero
+	
+	// Matriz del mapa para contar pellets
+	Definir mapa Como Entero
+	Dimension mapa[22, 28]
+	
+	// 2. Configuración inicial de constantes (Simulación)
+	TAM_CASILLA <- 16
+	nivel <- 1 // Puedes cambiar el nivel para probar la lógica
+	
+	// 3. POSICIÓN INICIAL DE PAC-MAN (Procesos directos)
+	pacmanX <- 13 * TAM_CASILLA
+	pacmanY <- 10 * TAM_CASILLA
+	pacmanDx <- 0
+	pacmanDy <- 0
+	nextDx <- 0
+	nextDy <- 0
+	
+	// 4. DETERMINAR FANTASMAS ACTIVOS SEGÚN EL NIVEL (Estructura de decisión)
+	numFantasmasActivos <- nivel
+	Si numFantasmasActivos > 6 Entonces
+		numFantasmasActivos <- 6
+	FinSi
+	
+	// 5. POSICIONAR FANTASMAS (Bucle Para)
+	Para i <- 1 Hasta numFantasmasActivos Con Paso 1 Hacer
+		ghostX[i] <- (11 + i) * TAM_CASILLA
+		ghostY[i] <- 4 * TAM_CASILLA
+		ghostDy[i] <- 0
+		
+		// Decisión aleatoria para la dirección inicial X (1 o -1)
+		Si Aleatorio(0, 1) == 0 Entonces
+			ghostDx[i] <- 1
+		Sino
+			ghostDx[i] <- -1
+		FinSi
+	FinPara
+	
+	// 6. CONTAR PELLETS RESTANTES EN EL MAPA (Ciclos anidados)
+	pelletsRestantes <- 0
+	Para f <- 1 Hasta 22 Con Paso 1 Hacer
+		Para c <- 1 Hasta 28 Con Paso 1 Hacer
+			// Si es pellet normal (0), poder (3) o fruta (4)
+			Si mapa[f, c] == 0 O mapa[f, c] == 3 O mapa[f, c] == 4 Entonces
+				pelletsRestantes <- pelletsRestantes + 1
+			FinSi
+		FinPara
+	FinPara
+	
+	// 7. Mensaje de confirmación
+	Escribir "Posiciones reiniciadas. Fantasmas activos: ", numFantasmasActivos
+	Escribir "Pellets totales en el escenario: ", pelletsRestantes
+FinSubProceso
+
+
+
+
+
+SUBPROCESO 5: DIBUJAR TIPOGRAFÍAS Y NÚMEROS
+=========================================================
+SubProceso DibujarLetraGrande
+	// 1. Declarar las variables de entrada y coordenadas de los segmentos
+	Definir letra Como Caracter
+	Definir x, i, r, g, b Como Entero
+	
+	// Variables para simular las dimensiones de las cajas de los segmentos
+	Definir segX, segY, segAncho, segAlto Como Entero
+	
+	// 2. Simulación de valores de entrada (PSeInt pedirá estos datos)
+	Escribir "Ingrese la letra a dibujar (P, A, C, G, I, R, L, S, E, M, O, V):"
+	Leer letra
+	Escribir "Ingrese coordenada X de origen:"
+	Leer x
+	Escribir "Ingrese coordenada Y de origen:"
+	Leer i
+	
+	// 3. ESTRUCTURA DE DECISIÓN EN CASCADA (Rombos del Diagrama)
+	Si letra == 'P' O letra == 'p' Entonces
+		Escribir "Dibujando letra P en posición: ", x, ", ", i
+		// Segmento 1: Superior Horizontal
+		segX <- x; segY <- i; segAncho <- 20; segAlto <- 6
+		// Segmento 2: Vertical Izquierdo
+		segX <- x; segY <- i; segAncho <- 6; segAlto <- 32
+		
+	Sino
+		Si letra == 'A' O letra == 'a' Entonces
+			Escribir "Dibujando letra A en posición: ", x, ", ", i
+			// Segmento 1: Superior
+			segX <- x; segY <- i; segAncho <- 20; segAlto <- 6
+			// Segmento 2: Izquierdo
+			segX <- x; segY <- i; segAncho <- 6; segAlto <- 32
+			
+		Sino
+			Si letra == 'C' O letra == 'c' Entonces
+				Escribir "Dibujando letra C en posición: ", x, ", ", i
+				// Segmento 1: Superior
+				segX <- x; segY <- i; segAncho <- 20; segAlto <- 6
+				// Segmento 2: Inferior
+				segX <- x; segY <- i; segAncho <- 20; segAlto <- 6
+				
+			Sino
+				Si letra == 'G' O letra == 'g' Entonces
+					Escribir "Dibujando letra G en posición: ", x, ", ", i
+					
+				Sino
+					Si letra == 'I' O letra == 'i' Entonces
+						Escribir "Dibujando letra I en posición: ", x, ", ", i
+						
+					Sino
+						Si letra == 'R' O letra == 'r' Entonces
+							Escribir "Dibujando letra R en posición:
+", x, ", ", i
+							
+						Sino
+							Si letra == 'L' O letra == 'l' Entonces
+								Escribir "Dibujando letra L en posición: ", x, ", ", i
+								
+							Sino
+								Si letra == 'S' O letra == 's' Entonces
+									Escribir "Dibujando letra S en posición: ", x, ", ", i
+									
+								Sino
+									Si letra == 'E' O letra == 'e' Entonces
+										Escribir "Dibujando letra E en posición: ", x, ", ", i
+										
+									Sino
+										Si letra == 'M' O letra == 'm' Entonces
+											Escribir "Dibujando letra M en posición: ", x, ", ", i
+											
+										Sino
+											Si letra == 'O' O letra == 'o' Entonces
+												Escribir "Dibujando letra O en posición: ", x, ", ", i
+												
+											Sino
+												Si letra == 'V' O letra == 'v' Entonces
+													Escribir "Dibujando letra V en posición: ", x, ", ", i
+												Sino
+													Escribir "Letra no soportada en el set de fuentes del Arcade"
+												FinSi
+											FinSi
+										FinSi
+									FinSi
+								FinSi
+							FinSi
+						FinSi
+					FinSi
+				FinSi
+			FinSi
+		FinSi
+	FinSi
+FinSubProceso
+
+SubProceso DibujarLetraChica(letra,x,i)
+	Definir segX, segY, segAncho, segAlto Como Entero
+	
+	Si letra == "P" O letra == "p" Entonces
+		Escribir "Mini-letra P en: ", x, ", ", i
+		segX <- x; segY <- i; segAncho <- 10; segAlto <- 3
+	Sino
+		Si letra == "A" O letra == "a" Entonces
+			Escribir "Mini-letra A en: ", x, ", ", i
+			segX <- x; segY <- i; segAncho <- 10; segAlto <- 3
+		Sino
+			Si letra == "C" O letra == "c" Entonces
+				Escribir "Mini-letra C en: ", x, ", ", i
+				segX <- x; segY <- i; segAncho <- 10; segAlto <- 3
+			Sino
+				// Mensaje genérico para el resto de letras y mantenerlo limpio
+				Escribir "Mini-letra ", letra, " en: ", x, ", ", i
+			FinSi
+		FinSi
+	FinSi
+FinSubProceso
+
+
+
+
+
+
+SUBPROCESO 6: DINÁMICA DE MOVIMIENTOS
+=========================================================
+SubProceso MoverPacman
+		Definir pacmanX, pacmanY, pacmanDx, pacmanDy Como Entero
+		Definir nextDx, nextDy, velocidad, TAM_CELDA Como Entero
+		Definir esMuroSiguiente, esMuroActual Como Logico
+		
+		// Configuración inicial simulada
+		TAM_CELDA <- 20
+		velocidad <- 2
+		pacmanX <- 40  // Píxeles actuales
+		pacmanY <- 40
+		pacmanDx <- 1 // Caminando a la derecha
+		pacmanDy <- 0
+		nextDx <- 0   // Intención de ir hacia arriba
+		nextDy <- -1
+		
+		// Simulación de detección de colisiones (Falso = Camino Libre)
+		esMuroSiguiente <- Falso 
+		esMuroActual <- Falso
+		
+		// 1. Intentar cambiar de dirección si el usuario lo pidió y no hay muro
+		Si esMuroSiguiente == Falso Entonces
+			pacmanDx <- nextDx
+			pacmanDy <- nextDy
+		FinSi
+		
+		// 2. Avanzar si la dirección actual está libre de obstáculos
+		Si esMuroActual == Falso Entonces
+			pacmanX <- pacmanX + (pacmanDx * velocidad)
+			pacmanY <- pacmanY + (pacmanDy * velocidad)
+		FinSi
+		
+		// 3. Mecánica del Túnel (Teletransporte en los bordes)
+		Si pacmanX < 0 Entonces
+			pacmanX <- 27 * TAM_CELDA
+		Sino
+			Si pacmanX > (27 * TAM_CELDA) Entonces
+				pacmanX <- 0
+			FinSi
+		FinSi
+		
+		Escribir "Nueva posición de Pac-Man: X = ", pacmanX, " Y = ", pacmanY
+FinSubProceso
+
+SubProceso MoverFantasmas
+		Definir ghostX, ghostY, ghostDx, ghostDy, i, TAM_CELDA Como Entero
+		Definir esInterseccion, muroIntento Como Logico
+		Definir nuevaDir Como Entero
+		
+		TAM_CELDA <- 20
+		ghostX <- 100
+		ghostY <- 80
+		ghostDx <- 1
+		ghostDy <- 0
+		
+		// Verificar si el fantasma está perfectamente alineado con la cuadrícula
+		Si (ghostX Mod TAM_CELDA == 0) Y (ghostY Mod TAM_CELDA == 0) Entonces
+			esInterseccion <- Verdadero
+		Sino
+			esInterseccion <- Falso
+		FinSi
+		
+		// Si está en intersección o choca con un muro frontal, cambia de rumbo
+		muroIntento <- Falso // Simulación de colisión
+		
+		Si esInterseccion O muroIntento Entonces
+			// Elegir dirección aleatoria: 1=Arriba, 2=Abajo, 3=Izquierda, 4=Derecha
+			nuevaDir <- Aleatorio(1, 4)
+			
+			Si nuevaDir == 1 Entonces
+				ghostDx <- 0; ghostDy <- -1
+			Sino
+				Si nuevaDir == 2 Entonces
+					ghostDx <- 0; ghostDy <- 1
+				Sino
+					Si nuevaDir == 3 Entonces
+						ghostDx <- -1; ghostDy <- 0
+					Sino
+						ghostDx <- 1; ghostDy <- 0
+					FinSi
+				FinSi
+			FinSi
+		FinSi
+		
+		// Aplicar movimiento continuo en píxeles
+		ghostX <- ghostX + (ghostDx * 2)
+		ghostY <- ghostY + (ghostDy * 2)
+		
+		Escribir "Fantasma movido a la posición física: ", ghostX, ", ", ghostY
+FinSubProceso
+
+
+
+
+
+ALGORITMO PRINCIPAL (El "Main")
+=========================================================
+Algoritmo JuegoPacmanPrincipal
+	// 1. Declaración de las variables globales del juego
+	Definir puntuacion, vidas Como Entero
+	Definir pelletsRestantes Como Entero
+	Definir juegoActivo Como Logico
+	
+	Definir pacmanX, pacmanY, pacmanDx, pacmanDy Como Entero
+	Definir ghostX, ghostY, ghostDx, ghostDy Como Entero
+	Dimension ghostX[4], ghostY[4], ghostDx[4], ghostDy[4]
+	
+	// 2. Inicialización de datos de control
+	puntuacion <- 0
+	vidas <- 3
+	pelletsRestantes <- 244 
+	juegoActivo <- Verdadero
+	
+	Escribir "=== ARRANQUE DEL MOTOR DEL JUEGO ==="
+	
+	// 3. BUCLE PRINCIPAL DE JUEGO (Game Loop)
+	Mientras juegoActivo == Verdadero Y vidas > 0 Y pelletsRestantes > 0 Hacer
+		
+		Escribir "Actualizando posiciones de Pacman y Fantasmas..."
+		
+		// 4. LLAMADAS REALES A DIBUJAR LETRA CHICA (HUD del juego)
+		// Aquí ya funciona perfectamente porque el SubProceso está arriba
+		DibujarLetraChica("H", 20, 10) // Para "HIGH SCORE"
+		DibujarLetraChica("I", 30, 10)
+		DibujarLetraChica("G", 40, 10)
+		DibujarLetraChica("H", 50, 10)
+		
+		// Evento de prueba: simular que avanza el juego
+		pelletsRestantes <- pelletsRestantes - 1
+		puntuacion <- puntuacion + 10
+		
+		// Romper el bucle en la primera vuelta para evitar ciclos infinitos en consola
+		juegoActivo <- Falso 
+	FinMientras
+	
+	Escribir "===================================="
+	Escribir "Juego terminado. Puntuación final: ", puntuacion
+FinAlgoritmo
+
+Nota: Si quiere ver el documento en docuemtos de googles este es el link https://docs.google.com/document/d/17zgp3UJ-g-Kef0qOo_vbq1AmAsneVTS0etnNzvhLqNQ/edit?usp=sharing
+Nota: Si queire ver la presentación este es el link https://canva.link/xg6jwx1whq3ue3a
